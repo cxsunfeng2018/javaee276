@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.e3.search.mapper.SearchItemMapper">
+
+	<!-- 查询数据库数据,把数据导入索引库 -->
+	<!-- resultType: 要求查询列表必须和javabean属性名称一一对应,且名称相同 -->
+	<select id="findDatabaseToSolrIndex" resultType="searchItem">
+		SELECT
+		a.id,
+		a.title,
+		a.sell_point,
+		a.price,
+		a.image,
+		b.item_desc,
+		c.name catelog_name
+		FROM
+		tb_item a,
+		tb_item_desc b,
+		tb_item_cat c
+		WHERE a.id = b.item_id
+		AND a.cid = c.id
+		AND a.status = 1
+	</select>
+	<!-- 根据商品id查询索引库需要的数据 -->
+	<select id="findDatabaseToSolrIndexByID" parameterType="long" resultType="searchItem">
+		SELECT
+		a.id,
+		a.title,
+		a.sell_point,
+		a.price,
+		a.image,
+		b.item_desc,
+		c.name catelog_name
+		FROM
+		tb_item a,
+		tb_item_desc b,
+		tb_item_cat c
+		WHERE a.id = b.item_id
+		AND a.cid = c.id
+		AND a.status = 1
+		AND a.id=#{itemId}
+	</select>
+
+</mapper>
